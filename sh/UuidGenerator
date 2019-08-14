@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+DEFAULT_UUID_V1_GENERATOR_LINK=https://www.uuidgenerator.net/api/version1
+DEFAULT_UUID_V4_GENERATOR_LINK=https://www.uuidgenerator.net/api/version4
+
+#By default is the version 4
+function generate(){
+    local current=""
+    
+    if [ $# -eq 0 ]; then
+        current=$DEFAULT_UUID_V4_GENERATOR_LINK 
+    elif [ $1 = "1" ]; then
+        current=$DEFAULT_UUID_V1_GENERATOR_LINK 
+    else 
+        current=$DEFAULT_UUID_V4_GENERATOR_LINK
+    fi
+
+    _response=$(curl -sb -H "Accept: */*" "${current}")
+    _response=`printf "$_response" | sed -e 's/\r\n//g'`
+    echo `printf "$_response" | tr -d '\r' | tr -d '\n'` 
+}
